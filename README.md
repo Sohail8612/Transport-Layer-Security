@@ -20,7 +20,7 @@ cd Labsetup
 dcbuild
 dcup -d
 ```
-![task1a](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1a.PNG)
+![task1a](TASK1A.png)
 
 # Task 1
 ### Task 1.a
@@ -31,7 +31,7 @@ cd volumes
 ```
 - What is the cipher used between the client and the server?
 
-![task1e](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1e.png)
+![task1e](TASK1E.png)
 
 ```handshake.py github.com``` gives:
 ```
@@ -71,14 +71,14 @@ After making TCP connection. Press any key to continue ...
   'version': 3}]
 After TLS handshake. Press any key to continue ...
 ```
-![task1c](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1c.PNG)
-![task1d](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1d.PNG)
+![task1c](TASK1C.png)
+![task1d](TASK1D.png)
 Reference to the SSL module documentation, ```/etc/ssl/certs/``` specifies the location of CA certificates that are used to validate the servers' certificates.
 It may be hard to keep tracing of packets in TLS handshake when running VNC server. So we can run the script in one container via ```dockerps``` and focus on the corresponding network interface:
-![task1b](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1b.PNG)
+![task1b](TASK1B.png)
 ### Task 1.b
 First change the ```cadir = ’/etc/ssl/certs’``` To ```cadir = ’./client-certs’```
-![task1f](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1f.PNG)
+![task1f](TASK1F.png)
 Than reun the code above
 After creating the TCP connection, it fails to verify server's certificate:
 ```
@@ -90,16 +90,16 @@ Traceback (most recent call last):
     self._sslobj.do_handshake()
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1131)
 ```
-![task1g](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1g.PNG)
+![task1g](TASK1G.png)
 To solve this problem, you need to place the corresponding CA’s certificate into your certs folder.
 Please use your client program to find out what CA certificate is needed to verify the ```github.com```
 server’s certificate, and then copy the certificate from the ```/etc/ssl/certs``` to your own folder.
 ```
 sudo cp /etc/ssl/certs/DigiCert_High_Assurance_EV_Root_CA.pem /home/seed/Desktop/TLS/Labsetup/volumes/client-certs/
 ```
-![task1h](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1h.PNG)
+![task1h](TASK1H.png)
 Now we run the command again to see the result.
-![task1i](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1i.PNG)
+![task1i](TASK1I.png)
 while running unchanged ```handshake.py``` to monitor which crt is being accessed.
 And we need to make a symbolic with the hash value of its common name field:
 ```
@@ -107,12 +107,12 @@ openssl x509 -in client-certs/DigiCert_High_Assurance_EV_Root_CA.pem -noout -sub
 # 244b5494
 ln -s client-certs/DigiCert_High_Assurance_EV_Root_CA.crt client-certs/244b5494.0
 ```
-![task1j](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1j.PNG)
+![task1j](TASK1J.png)
 See the result change using
 ```
 ls -ld
 ```
-![task1k](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1k.PNG)
+![task1k](TASK1K.png)
 ### Task 1.c
 - Step 1: get the IP address of ```github.com```
 ```
@@ -136,13 +136,13 @@ github.com.		13	IN	A	13.234.176.102
 ;; WHEN: Sat Jan 01 04:29:58 EST 2022
 ;; MSG SIZE  rcvd: 55
 ```
-![task1l](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1l.PNG)
+![task1l](TASK1L.png)
 - Step 2: In the client container, edit /etc/hosts to add 2 lines:
 ```
 13.234.176.102 www.github2021.com
 13.234.176.102 www.github2021.com
 ```
-![task1m](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1m.PNG)
+![task1m](TASK1M.png)
 - Step 3: Change ```context.check_hostname``` as ```False``` in ```handshake.py```
 It works like what it did in Task 1.c, but if context.check_hostname is set back as True, an error appears when verifying certificate:
 ```
@@ -156,15 +156,15 @@ ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verif
 Because the hostname we request to establish the connection is not the same one specified by the server's SSL certificate.
 ### Task 1.d
 Add HTTP request based on ```handshake.py``` and then get ```http_header.py``` 
-![task1n](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1n.PNG)
+![task1n](TASK1N.png)
 run:
 ```
 ./http_header.py github.com
 ```
 As Result
-![task1o](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1o.PNG)
+![task1o](TASK1O.png)
 To request for a certain image, specify its relative path as the second argument when running this script. For example:
 ```
 ./http-client.py seedsecuritylabs.org assets/images/seed_labs_b.png
 ```
-![task1p](https://github.com/Asad-Ali-Code/Transport-Layer-Security/blob/main/task1p.PNG
+![task1p](TASK1P.png)
